@@ -12,7 +12,6 @@ import scala.util.Random
  * Since: 
  *
  */
-//todo use random method
 trait SimpleRandom extends RandomLogic{
   override def nextTurn: Turn = 1 to 200 map turn find validate get
 }
