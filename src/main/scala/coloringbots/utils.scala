@@ -70,7 +70,7 @@ class Bots{
 class Timer{
   private val map = new mutable.HashMap[Bot, Long]()
 
-  def action(bot: Bot, f: Bot=>Unit) = {
+  def action(bot: LogicBot, f: LogicBot => Unit) = {
     val start = System.nanoTime
     f(bot)
     map(bot) = map.getOrElse(bot, 0L) + System.nanoTime - start
