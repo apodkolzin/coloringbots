@@ -15,7 +15,7 @@ import scala.util.Random
   * Since:
   *
   */
-case class SeqBotV2(val color: String) extends Bot{
+trait SeqBotV2 extends BotLogic with GameContext{
 
   val random = new Random
   var cellMove = new collection.mutable.ArrayStack[Cell]
@@ -70,7 +70,7 @@ case class SeqBotV2(val color: String) extends Bot{
            y >= 0 && y < field.size.y )
          {
            val cell = field.get(Coord(x, y)).get
-           val turn = Turn(this, cell)
+           val turn = this -> cell
            if (turn.validate) {
              cellMove.push(cell)
              return turn
@@ -92,7 +92,4 @@ case class SeqBotV2(val color: String) extends Bot{
 
     throw new Exception("No more turn!!!")
   }
-
-  override def notify(cell: Cell) = {}
-  override var field: Field = null
 }

@@ -43,6 +43,7 @@ case class FieldImpl(override val size: Coord) extends Field{
 
 }
 
+
 /* Объект Раунд */
 class Round(val bots: Bots, timer: Timer){
   /* Делает ходы всех ботов по разу */
@@ -58,8 +59,8 @@ class Round(val bots: Bots, timer: Timer){
   /* Дисквалификация бота */
   private def disqualify(bot: Bot): Unit = {bots disqualify bot; None}
   /* Ячейка представляется объектом ход */
-  private def cell(bot: Bot): Turn = bot.nextTurn
-  private def notify(cell: Cell): Unit = bots.forall(_.notify(cell))
+  private def cell(bot: Bot): Turn = bot.asInstanceOf[BotLogic].nextTurn
+  private def notify(cell: Cell): Unit = bots.forall(_.asInstanceOf[BotLogic].notify(cell))
 }
 
 /**
@@ -67,14 +68,14 @@ class Round(val bots: Bots, timer: Timer){
  * @param size   - размер поля
  * @param rounds - количество раундов
  */
-case class Game (size: Coord, rounds: Int) {
-  private val field = FieldImpl(size)
-  private val bots = new Bots
+case class Game (size: Coord, rounds: Int) extends GameContext{
+  val field = FieldImpl(size)
+  val bots = new Bots
   private val timer = new Timer
 
 
   /* регистрация бота */
-  def register(bot: Bot) = { bots register bot; bot.field = field; this }
+  def register(bot: Bot with BotLogic) = { bots register bot; this }
 
   /* запуск игры */
   def play = {

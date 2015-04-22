@@ -11,7 +11,7 @@ import scala.util.{Try, Random}
  * Time: 15:56
  *
  */
-case class NearestBot(override val color: String) extends RandomBotBase{
+trait NearestStrategy extends RandomLogic{
   implicit def cell2tuple(c: Cell): (Int, Int)= (c.coord.x, c.coord.y)
 
   private var current: Option[Turn] = None
@@ -41,6 +41,5 @@ case class NearestBot(override val color: String) extends RandomBotBase{
   private def y = coord.y
   private def coord: Coord = current.map(_.cell.coord).getOrElse(field.size)
 
-  override var field: Field = null
   override def notify(cell: Cell): Unit = {}
 }

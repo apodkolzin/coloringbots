@@ -37,19 +37,21 @@ case class TurnMaker(bot: Option[Bot], cell: Option[Cell]) {
  * Список ботов. Если в ходе выполнения бот совершает недопустимое действие, он дисквалифицируется
  */
 class Bots{
-  private val bots = new mutable.HashSet[Bot]
+  type LogicBot = Bot with BotLogic
+
+  private val bots = new mutable.HashSet[LogicBot]
   private val losers = new mutable.HashSet[Bot]
 
   private def isActive(bot: Bot) = !(losers contains bot)
 
-  def register(bot: Bot): Bots = { bots += bot; this }
+  def register(bot: LogicBot): Bots = { bots += bot; this }
   def disqualify(bot: Bot) = losers += bot
 
-  def players: Seq[Bot] = bots filter isActive toSeq
-  def all: Seq[Bot] = bots toSeq
+  def players: Seq[LogicBot] = bots filter isActive toSeq
+  def all: Seq[LogicBot] = bots toSeq
   def dead: Seq[Bot] = losers toSeq
   def foreach(turn: (Bot) => Unit) = players foreach turn
-  def forall(turn: (Bot) => Unit)  = all foreach turn
+  def forall(turn: (LogicBot) => Unit)  = all foreach turn
 }
 
 class Timer{

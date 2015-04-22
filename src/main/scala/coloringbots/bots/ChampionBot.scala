@@ -1,11 +1,11 @@
 package coloringbots.bots
 
-import coloringbots.{Field, Cell, Turn, Bot}
+import coloringbots._
 
 /**
  * Created by azimka on 30.12.14.
  */
-case class ChampionBot(val color: String) extends Bot {
+trait ChampionBot extends BotLogic with GameContext {
 
   override def nextTurn: Turn = {
     var innerDiagSize = 0
@@ -34,10 +34,6 @@ case class ChampionBot(val color: String) extends Bot {
     }
     throw new Exception("Turn can not define")
   }
-
-  override def notify(cell: Cell) = {}
-
-  override var field: Field = null
 
   var isFirstStep = true;
 

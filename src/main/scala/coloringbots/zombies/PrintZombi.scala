@@ -1,6 +1,6 @@
 package coloringbots.zombies
 
-import coloringbots.{Bot, Cell, Field, Turn}
+import coloringbots._
 
 import scala.collection.mutable
 
@@ -12,19 +12,18 @@ import scala.collection.mutable
  * Since: 
  *
  */
-object PrintZombi extends Bot
+object PrintZombi extends Bot("priter") with BotLogic
 {
   override def notify(cell: Cell): Unit = this print cell
   override def nextTurn: Turn = throw new UnsupportedOperationException()
-  override def color: String = "printer"
-  override var field: Field = null
 
 
   private def print(cell: Cell): Unit = {
     val counter = new Counter
+    val field: Field = cell.field
 
     (0 to field.size.y).reverse.foreach{y=>
-      (0 to field.size.x).map(x => (x, y)).foreach(c => print(char(c, cell, counter)))
+      (0 to field.size.x).map(x => field.get(Coord(x, y)).get).foreach(c => print(char(c, cell, counter)))
       println()
     }
     println(counter)

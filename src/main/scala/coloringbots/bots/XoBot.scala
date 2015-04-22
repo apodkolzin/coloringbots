@@ -1,9 +1,8 @@
 package coloringbots.bots
 
-import coloringbots.{Bot, Cell, Field, Turn}
+import coloringbots._
 
-case class XoBot(val color: String) extends Bot {
-
+trait XoBot extends BotLogic with GameContext{
   override def nextTurn: Turn = {
 
     var t: Turn = this ->(1, 1)
@@ -23,7 +22,4 @@ case class XoBot(val color: String) extends Bot {
     //throw new Exception("Turn can not define")
     this->(0, 0)
   }
-
-  override def notify(cell: Cell) = {}
-  override var field: Field = null
 }

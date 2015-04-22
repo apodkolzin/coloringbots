@@ -5,8 +5,7 @@ import coloringbots._
 /**
  * Created by pavel on 30.12.14.
  */
-case class ImmortalBot(val color: String) extends Bot
-{
+trait ImmortalBot extends BotLogic with GameContext {
   implicit def cellOpt(opt:Option[Cell]) = opt.get
   override def nextTurn: Turn = {
 
@@ -69,7 +68,4 @@ case class ImmortalBot(val color: String) extends Bot
         { y >= 0 && y < field.size.y } &&
         (this->(x,y)).validate }.map { case (x,y) => (this->(x,y)) }
   }
-
-  override def notify(cell: Cell) = {}
-  override var field: Field = null
 }

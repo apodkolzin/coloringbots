@@ -13,8 +13,6 @@ package coloringbots
  */
 case class Coord(x: Int, y: Int) {
   override def toString = s"{$x,$y}"
-  override def hashCode(): Int = x.hashCode() * 1000 + y.hashCode()
-  override def equals(obj: scala.Any): Boolean = obj.isInstanceOf[Coord] && x == obj.asInstanceOf[Coord].x && y == obj.asInstanceOf[Coord].y
 }
 
 /**
@@ -52,24 +50,34 @@ trait Field {
 }
 
 /* Бот */
-trait Bot{
-  /* Поле. Устанавливается при регистрации бота в игре */
-  var field: Field
-  /* Цвет, которым закрашивает бот ячейки на поле */
-  def color: String
+trait BotLogic{
   /* Возвращает следующий ход */
   def nextTurn: Turn
   /* Оповещение о закрашивании ячейки cell */
-  def notify(cell: Cell): Unit
+  def notify(cell: Cell) {}
+}
 
-  protected def ->(cell: Cell): Turn = Turn(this, cell)
+trait GameContext {
+  def field: Field
+
+  protected final def ->(cell: Cell): Turn = Turn(this.asInstanceOf[Bot], cell)
   implicit def tuple2coord(tuple: (Int, Int)): Cell = field.get(Coord(tuple._1, tuple._2)).get
+}
 
+class Bot(val color: String) {
   override def toString: String = s"$color bot"
+
+  override def hashCode(): Int = color.hashCode
+
+  override def equals(obj: scala.Any): Boolean = obj match {
+    case bot: Bot => bot.color == color
+    case _ => false
+  }
+
 }
 
 /* объект Ход, определяется намерениями бота @param bot закрасить ячейку cell */
-case class Turn(bot: Bot, cell: Cell){
+final class Turn(val bot: Bot, val cell: Cell){
   /* Определяет корректность данного хода */
   def validate: Boolean = canPaint
   def canPaint = isBlank || canFill || canOver
@@ -86,3 +94,6 @@ case class Turn(bot: Bot, cell: Cell){
   override def toString: String = s"$bot -> (${cell.coord.x}, ${cell.coord.y}})"
 }
 
+object Turn {
+  def apply(bot: Bot, cell: Cell) = new Turn(bot, cell)
+}

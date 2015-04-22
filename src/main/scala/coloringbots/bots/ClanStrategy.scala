@@ -12,7 +12,7 @@ import scala.util.{Try, Random}
  * Since: 
  *
  */
-case class ClanBot (override val color: String) extends RandomBotBase {
+trait ClanStrategy extends RandomLogic {
   implicit def cell2tuple(cell: Cell): (Int, Int) = (cell.coord.x, cell.coord.y)
   private var lasts = List[Turn]()
 
@@ -57,5 +57,4 @@ case class ClanBot (override val color: String) extends RandomBotBase {
 
 
   override def notify(cell: Cell): Unit = {}
-  override var field: Field = null
 }

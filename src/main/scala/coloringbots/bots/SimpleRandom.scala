@@ -12,11 +12,7 @@ import scala.util.Random
  * Since: 
  *
  */
-case class RandomBot(val color: String) extends RandomBotBase{
-
+//todo use random method
+trait SimpleRandom extends RandomLogic{
   override def nextTurn: Turn = 1 to 200 map turn find validate get
-
-  override def notify(cell: Cell) = {}
-  override var field: Field = null
-
 }

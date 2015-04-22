@@ -11,11 +11,13 @@ import coloringbots._
  *
  */
 
-abstract class RandomBotBase extends Bot
-{
+trait RandomLogic extends BotLogic with GameContext{
+
   protected def validate(turn: Turn) = turn.validate
   protected def turn(i: Int): Turn = this -> random
   private def random: (Int, Int) = (field.size.x, field.size.y) ~ 2
+
+  override def notify(cell: Cell) = {}
 
   implicit class Random(xy: (Int, Int)) {
     private val r = new scala.util.Random

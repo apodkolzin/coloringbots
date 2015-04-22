@@ -9,8 +9,8 @@ import scala.util.Random
 /**
  * Created by ����� on 31.12.2014.
  */
-case class RapidBot(val color: String) extends Bot {
-  val random = new Random
+trait RapidBot extends BotLogic with GameContext{
+val random = new Random
   val cellMap:collection.mutable.ArrayBuffer[(Int,Int)]= collection.mutable.ArrayBuffer.empty[(Int,Int)]
 
   lazy val init = {
@@ -72,7 +72,7 @@ case class RapidBot(val color: String) extends Bot {
     def traverse(cell:Cell) = {
       if ( !cell.whose.contains(this) )
       {
-        val turn = Turn(this, cell)
+        val turn = this -> cell
         val c = (cell.coord.x, cell.coord.y)
         if (turn.validate)
         {
@@ -84,6 +84,4 @@ case class RapidBot(val color: String) extends Bot {
       }
     }
   }
-
-  override var field: Field = null
 }

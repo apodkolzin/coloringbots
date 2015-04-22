@@ -1,6 +1,6 @@
 package coloringbots.bots
 
-import coloringbots.{Bot, Cell, Field, Turn}
+import coloringbots._
 
 /**
  * Created by IntelliJ IDEA.
@@ -10,7 +10,8 @@ import coloringbots.{Bot, Cell, Field, Turn}
  * Since: 
  *
  */
-case class SeqBot(val color: String) extends Bot{
+trait SeqBot extends BotLogic with GameContext{
+
   override def nextTurn: Turn = {
     (0 to field.size.y).foreach {y=>
       (0 to field.size.x).foreach{ x =>
@@ -21,7 +22,4 @@ case class SeqBot(val color: String) extends Bot{
     }
     throw new Exception("Turn can not define")
   }
-
-  override def notify(cell: Cell) = {}
-  override var field: Field = null
 }

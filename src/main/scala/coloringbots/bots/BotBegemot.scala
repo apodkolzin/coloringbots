@@ -1,6 +1,6 @@
 package coloringbots.bots
 
-import coloringbots.{Field, Cell, Turn, Bot}
+import coloringbots._
 
 import scala.util.Random
 
@@ -9,13 +9,7 @@ import scala.util.Random
  * Date: 31.12.14
  * Time: 13:53
  */
-case class BotBegemot(val color: String) extends Bot {
-
-  override var field: Field = null
-
-  /* Оповещение о закрашивании ячейки cell */
-  override def notify(cell: Cell): Unit = {}
-
+trait BotBegemot extends BotLogic with GameContext {
   /* Возвращает следующий ход */
   override def nextTurn: Turn = {
     1 to (field.size.x + 1) * (field.size.y + 1) map turn find validate getOrElse(dummy)
