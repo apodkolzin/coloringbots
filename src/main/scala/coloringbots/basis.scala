@@ -60,7 +60,7 @@ trait BotLogic{
 trait GameContext {
   def field: Field
 
-  protected final def ->(cell: Cell): Turn = Turn(this.asInstanceOf[Bot], cell)
+  protected final def ->(cell: Cell): Turn = new Turn(this.asInstanceOf[Bot], cell)
   implicit def tuple2coord(tuple: (Int, Int)): Cell = field.get(Coord(tuple._1, tuple._2)).get
 }
 
@@ -73,7 +73,6 @@ class Bot(val color: String) {
     case bot: Bot => bot.color == color
     case _ => false
   }
-
 }
 
 /* объект Ход, определяется намерениями бота @param bot закрасить ячейку cell */
@@ -92,8 +91,4 @@ final class Turn(val bot: Bot, val cell: Cell){
   def alien = cell.neighbours.count(_.whose.exists(_ != bot))
   def my = cell.neighbours.count(_.whose.contains(bot))
   override def toString: String = s"$bot -> (${cell.coord.x}, ${cell.coord.y}})"
-}
-
-object Turn {
-  def apply(bot: Bot, cell: Cell) = new Turn(bot, cell)
 }

@@ -12,7 +12,7 @@ import scala.util.Try
  */
 
 /* Данный объект потребовался для поддержки синтаксиса, используетмого в объекте Round */
-case class TurnMaker(bot: Option[Bot], cell: Option[Cell]) {
+class TurnMaker(bot: Option[Bot], cell: Option[Cell]) {
   /**
    * Получаем ход, валидируем его и выполняем и возвращаем пустой TurnMaker.
    * Если была ошибка - возвращаем TurnMaker с установленым ботом  */
@@ -27,9 +27,9 @@ case class TurnMaker(bot: Option[Bot], cell: Option[Cell]) {
   private def perform(turn: Turn): TurnMaker = {
     val cell: CellImpl = turn.cell.asInstanceOf[CellImpl]
     cell.set(turn.bot)
-    TurnMaker(None, Some(cell))
+    new TurnMaker(None, Some(cell))
   }
-  private def bad: TurnMaker = TurnMaker(bot, None)
+  private def bad: TurnMaker = new TurnMaker(bot, None)
   private def exception = throw new IllegalStateException("Некорректный ход у бота " + bot)
 }
 
@@ -77,7 +77,7 @@ case class Neighbours(private val set: Set[Cell]){
 /* неявные преобразования */
 object Utils {
 //  implicit def bots2Round(bots: Bots): Round = new Round(bots)
-  implicit def bot2TurnMaker(bot: Bot):TurnMaker = TurnMaker(Some(bot), None)
+  implicit def bot2TurnMaker(bot: Bot):TurnMaker = new TurnMaker(Some(bot), None)
   implicit def option2Cell(o: Option[Cell]): Cell = o.get
   implicit def neighbours2Set(n: Neighbours): Set[Cell] = n.toSet
   implicit def tuple2Coord(t: (Int, Int)): Coord = Coord(t._1, t._2)

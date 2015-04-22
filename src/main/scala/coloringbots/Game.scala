@@ -45,20 +45,19 @@ case class FieldImpl(override val size: Coord) extends Field{
 
 
 /* Объект Раунд */
-class Round(val bots: Bots, timer: Timer){
+class Round(val bots: Bots){
   /* Делает ходы всех ботов по разу */
-  def run(i: Int) = bots foreach turnAndTime
+  def run(i: Int) = bots foreach turn
   /* Выполняет ход бота. Если ход с ошибкой или некорректный - дисквалификация бота */
   def turn(bot: Bot): Unit = {
     // вся красивость реализована в объекте TurnMaker
     bot paint cell send notify or disqualify
   }
 
-  def turnAndTime(bot: Bot) = timer action(bot, turn)
-
   /* Дисквалификация бота */
   private def disqualify(bot: Bot): Unit = {bots disqualify bot; None}
   /* Ячейка представляется объектом ход */
+  //todo without asInstanceOf
   private def cell(bot: Bot): Turn = bot.asInstanceOf[BotLogic].nextTurn
   private def notify(cell: Cell): Unit = bots.forall(_.asInstanceOf[BotLogic].notify(cell))
 }
@@ -89,8 +88,12 @@ case class Game (size: Coord, rounds: Int) extends GameContext{
   private def round(i: Int) = {
     println(s"round $i")
     println(s"${bots.players} are ready to fight")
-    new Round(bots, timer).run(i)
+    new TimeRound(bots).run(i)
     println(timer)
+  }
+
+  class TimeRound(override val bots: Bots) extends Round(bots){
+    override def turn(bot: Bot): Unit = timer.action(bot, super.turn)
   }
 }
 
