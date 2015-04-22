@@ -54,7 +54,4 @@ trait ClanStrategy extends RandomLogic {
 
   private def randomTurn: Turn = 1 to 20 map turn find validate get
   private def save(turn: Turn): Turn = {lasts = turn :: lasts; turn}
-
-
-  override def notify(cell: Cell): Unit = {}
 }

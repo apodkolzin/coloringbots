@@ -12,9 +12,8 @@ import scala.util.{Try, Random}
  *
  */
 trait NearestStrategy extends RandomLogic{
-  implicit def cell2tuple(c: Cell): (Int, Int)= (c.coord.x, c.coord.y)
-
   private var current: Option[Turn] = None
+
   override def nextTurn: Turn = {
     if (current.isEmpty)
       current = this find first
@@ -35,11 +34,12 @@ trait NearestStrategy extends RandomLogic{
   def turn(f: => (Int, Int)): Turn = this -> f
   private def validate(turn: Option[Turn]): Boolean = turn exists validate
 
-  private def first: (Int, Int) = (x, y) ~ 2
-  private def next:  (Int, Int) = (x, y) + (0, 0) ~ (-2)
+  private def first: (Int, Int) = (x, y) <~ 2
+  private def next:  (Int, Int) = (x, y) + ( (0, 0) <~ -2 )
   private def x = coord.x
   private def y = coord.y
   private def coord: Coord = current.map(_.cell.coord).getOrElse(field.size)
 
-  override def notify(cell: Cell): Unit = {}
+  implicit def cell2tuple(c: Cell): (Int, Int)= (c.coord.x, c.coord.y)
+
 }
